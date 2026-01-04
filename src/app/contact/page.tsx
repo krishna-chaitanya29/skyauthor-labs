@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle, Mail, MapPin, MessageSquare, Phone, Send } from 'lucide-react';
+import { CheckCircle, Mail, MapPin, MessageSquare, Send } from 'lucide-react';
 import { useState } from 'react';
 
 export default function ContactPage() {

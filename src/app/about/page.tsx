@@ -1,4 +1,4 @@
-import { Mail, MapPin, MessageSquare, Send, Zap } from 'lucide-react';
+import { Mail, MessageSquare, Send, Zap } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 

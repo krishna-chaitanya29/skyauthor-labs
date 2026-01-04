@@ -1,4 +1,4 @@
-import { BarChart3, Eye, Mail, Megaphone, Target, Users, Zap } from 'lucide-react';
+import { BarChart3, Eye, Mail, Megaphone, Target, Users } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
