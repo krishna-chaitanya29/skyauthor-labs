@@ -56,13 +56,22 @@ export default function ArticlesPage() {
     if (!deleteId) return;
     
     setDeleting(true);
-    const { error } = await supabase
-      .from('articles')
-      .delete()
-      .eq('id', deleteId);
+    try {
+      const response = await fetch(`/api/admin/articles/${deleteId}`, {
+        method: 'DELETE',
+      });
 
-    if (!error) {
-      setArticles(articles.filter(a => a.id !== deleteId));
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error('Delete error:', data);
+        alert(`Failed to delete: ${data.error || 'Unknown error'}`);
+      } else {
+        setArticles(articles.filter(a => a.id !== deleteId));
+      }
+    } catch (err) {
+      console.error('Delete exception:', err);
+      alert('Failed to delete article. Please try again.');
     }
     setDeleting(false);
     setShowDeleteModal(false);
@@ -70,15 +79,20 @@ export default function ArticlesPage() {
   };
 
   const togglePublish = async (id: string, currentStatus: boolean) => {
-    const { error } = await supabase
-      .from('articles')
-      .update({ is_published: !currentStatus })
-      .eq('id', id);
+    try {
+      const response = await fetch(`/api/admin/articles/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_published: !currentStatus }),
+      });
 
-    if (!error) {
-      setArticles(articles.map(a => 
-        a.id === id ? { ...a, is_published: !currentStatus } : a
-      ));
+      if (response.ok) {
+        setArticles(articles.map(a => 
+          a.id === id ? { ...a, is_published: !currentStatus } : a
+        ));
+      }
+    } catch (err) {
+      console.error('Toggle publish error:', err);
     }
   };
 

@@ -58,11 +58,11 @@ export default function ArticleContent({ post }: ArticleContentProps) {
       // Show back to top button
       setShowBackToTop(window.scrollY > 500);
 
-      // Show newsletter popup at 70% read (only once per session)
-      if (readingProgress >= 70 && !hasShownPopup) {
-        setShowNewsletterPopup(true);
-        setHasShownPopup(true);
-      }
+      // Newsletter popup disabled for now
+      // if (readingProgress >= 70 && !hasShownPopup) {
+      //   setShowNewsletterPopup(true);
+      //   setHasShownPopup(true);
+      // }
     };
 
     window.addEventListener('scroll', handleScroll);

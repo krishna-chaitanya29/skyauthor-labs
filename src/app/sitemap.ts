@@ -1,3 +1,4 @@
+import { getCategoryValues } from '@/lib/categories';
 import { supabase } from '@/lib/supabase';
 import type { MetadataRoute } from 'next';
 
@@ -39,9 +40,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Category pages
-  const categories = ['tech', 'money', 'news', 'ai', 'startup', 'tutorial'];
-  const categoryUrls: MetadataRoute.Sitemap = categories.map((cat) => ({
+  // Category pages - using shared categories config
+  const categoryValues = getCategoryValues();
+  const categoryUrls: MetadataRoute.Sitemap = categoryValues.map((cat) => ({
     url: `${baseUrl}/category/${cat}`,
     lastModified: new Date(),
     changeFrequency: 'daily',

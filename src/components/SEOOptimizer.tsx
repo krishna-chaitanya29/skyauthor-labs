@@ -69,12 +69,13 @@ export default function SEOOptimizer({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 relative z-10">
       <button
         onClick={handleOptimize}
         disabled={loading || !title || !content}
         type="button"
-        className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{ pointerEvents: 'auto' }}
+        className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
         {loading ? (
           <>

@@ -32,14 +32,8 @@ const RichEditor = dynamic(() => import('@/components/RichEditor'), {
   )
 });
 
-const categories = [
-  { value: 'Tech', label: 'Technology', color: 'bg-blue-500' },
-  { value: 'Money', label: 'Finance & Money', color: 'bg-green-500' },
-  { value: 'News', label: 'Breaking News', color: 'bg-red-500' },
-  { value: 'AI', label: 'Artificial Intelligence', color: 'bg-purple-500' },
-  { value: 'Startup', label: 'Startups & Business', color: 'bg-orange-500' },
-  { value: 'Tutorial', label: 'Tutorials & Guides', color: 'bg-cyan-500' },
-];
+// Import categories from shared config
+import { categories } from '@/lib/categories';
 
 export default function PublishPage() {
   // Form state

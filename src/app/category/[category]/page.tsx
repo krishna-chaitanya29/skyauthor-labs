@@ -1,16 +1,18 @@
 import ArticleCard from '@/components/ArticleCard';
+import { categories } from '@/lib/categories';
 import { supabase } from '@/lib/supabase';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-const categoryInfo: Record<string, { title: string; description: string; color: string }> = {
-  tech: { title: 'Technology', description: 'Latest tech news, reviews, and deep dives', color: 'bg-blue-500' },
-  money: { title: 'Finance & Money', description: 'Financial insights, crypto, and investment strategies', color: 'bg-green-500' },
-  news: { title: 'Breaking News', description: 'Stay updated with the latest headlines', color: 'bg-red-500' },
-  ai: { title: 'Artificial Intelligence', description: 'AI trends, tools, and breakthroughs', color: 'bg-purple-500' },
-  startup: { title: 'Startups & Business', description: 'Entrepreneurship and business insights', color: 'bg-orange-500' },
-  tutorial: { title: 'Tutorials & Guides', description: 'Step-by-step guides and how-tos', color: 'bg-cyan-500' },
-};
+// Build category info from shared config
+const categoryInfo: Record<string, { title: string; description: string; color: string }> = {};
+categories.forEach(cat => {
+  categoryInfo[cat.value.toLowerCase()] = {
+    title: cat.label,
+    description: `Explore ${cat.label} articles - latest news, insights, and guides`,
+    color: cat.color,
+  };
+});
 
 export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category } = await params;

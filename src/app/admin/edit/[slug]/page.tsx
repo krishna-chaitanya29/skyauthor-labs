@@ -26,14 +26,8 @@ const RichEditor = dynamic(() => import('@/components/RichEditor'), {
   )
 });
 
-const categories = [
-  { value: 'Tech', label: 'Technology' },
-  { value: 'Money', label: 'Finance & Money' },
-  { value: 'News', label: 'Breaking News' },
-  { value: 'AI', label: 'Artificial Intelligence' },
-  { value: 'Startup', label: 'Startups & Business' },
-  { value: 'Tutorial', label: 'Tutorials & Guides' },
-];
+// Import categories from shared config
+import { categories } from '@/lib/categories';
 
 export default function EditArticlePage() {
   const params = useParams();
