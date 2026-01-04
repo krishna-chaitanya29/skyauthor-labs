@@ -15,23 +15,87 @@ import {
     Zap
 } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface AdminDashboardProps {
   user: User;
 }
 
+interface DashboardStats {
+  totalArticles: number;
+  totalViews: number;
+  thisMonthViews: number;
+  subscribers: number;
+}
+
 export default function AdminDashboard({ user }: AdminDashboardProps) {
+  const [stats, setStats] = useState<DashboardStats>({
+    totalArticles: 0,
+    totalViews: 0,
+    thisMonthViews: 0,
+    subscribers: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const supabase = createBrowserSupabaseClient();
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      // Fetch published articles count and total views
+      const { data: articles } = await supabase
+        .from('articles')
+        .select('view_count, created_at')
+        .eq('is_published', true);
+
+      const totalArticles = articles?.length || 0;
+      const totalViews = articles?.reduce((sum, a) => sum + (a.view_count || 0), 0) || 0;
+
+      // Calculate this month's articles views (articles created this month)
+      const thisMonth = new Date();
+      thisMonth.setDate(1);
+      thisMonth.setHours(0, 0, 0, 0);
+      
+      const thisMonthViews = articles
+        ?.filter(a => new Date(a.created_at) >= thisMonth)
+        .reduce((sum, a) => sum + (a.view_count || 0), 0) || 0;
+
+      // Fetch subscribers count
+      const { count: subscribersCount } = await supabase
+        .from('newsletter_subscribers')
+        .select('*', { count: 'exact', head: true });
+
+      setStats({
+        totalArticles,
+        totalViews,
+        thisMonthViews,
+        subscribers: subscribersCount || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogout = async () => {
-    const supabase = createBrowserSupabaseClient();
     await supabase.auth.signOut();
     window.location.href = '/';
   };
 
-  const stats = [
-    { label: 'Total Articles', value: '24', icon: FileText, color: 'bg-blue-500' },
-    { label: 'Total Views', value: '12.4K', icon: Eye, color: 'bg-green-500' },
-    { label: 'This Month', value: '+2.1K', icon: TrendingUp, color: 'bg-purple-500' },
-    { label: 'Subscribers', value: '847', icon: Users, color: 'bg-pink-500' },
+  const formatNumber = (num: number): string => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+    return num.toString();
+  };
+
+  const statsDisplay = [
+    { label: 'Total Articles', value: loading ? '...' : stats.totalArticles.toString(), icon: FileText, color: 'bg-blue-500' },
+    { label: 'Total Views', value: loading ? '...' : formatNumber(stats.totalViews), icon: Eye, color: 'bg-green-500' },
+    { label: 'This Month', value: loading ? '...' : '+' + formatNumber(stats.thisMonthViews), icon: TrendingUp, color: 'bg-purple-500' },
+    { label: 'Subscribers', value: loading ? '...' : formatNumber(stats.subscribers), icon: Users, color: 'bg-pink-500' },
   ];
 
   const quickActions = [
@@ -72,7 +136,7 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {stats.map((stat) => (
+          {statsDisplay.map((stat) => (
             <div
               key={stat.label}
               className="bg-[var(--background-secondary)] border border-[var(--border)] rounded-xl p-6 card-hover"

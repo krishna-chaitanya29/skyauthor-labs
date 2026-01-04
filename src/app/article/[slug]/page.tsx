@@ -4,6 +4,9 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ArticleContent from './ArticleContent';
 
+// Revalidate every 60 seconds to pick up deletions/updates faster
+export const revalidate = 60;
+
 // Generate metadata for SEO
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -11,6 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .from('articles')
     .select('*')
     .eq('slug', slug)
+    .eq('is_published', true)
     .single();
   
   if (!post) {
@@ -67,13 +71,15 @@ export async function generateStaticParams() {
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
-  // Fetch article data
+  // Fetch article data - only published articles
   const { data: post } = await supabase
     .from('articles')
     .select('*')
     .eq('slug', slug)
+    .eq('is_published', true)
     .single();
 
+  // Return 404 if article doesn't exist OR is unpublished/deleted
   if (!post) notFound();
 
   // Increment view count (non-blocking)

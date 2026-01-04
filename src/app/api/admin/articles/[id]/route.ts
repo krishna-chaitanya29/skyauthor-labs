@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Create admin client with service role key (bypasses RLS)
@@ -18,6 +19,13 @@ export async function DELETE(
       return NextResponse.json({ error: 'Article ID required' }, { status: 400 });
     }
 
+    // First get the article slug for revalidation
+    const { data: article } = await supabaseAdmin
+      .from('articles')
+      .select('slug, category')
+      .eq('id', id)
+      .single();
+
     const { error } = await supabaseAdmin
       .from('articles')
       .delete()
@@ -28,7 +36,17 @@ export async function DELETE(
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true });
+    // Revalidate cached pages after deletion
+    if (article?.slug) {
+      revalidatePath(`/article/${article.slug}`);
+    }
+    revalidatePath('/');
+    revalidatePath('/trending');
+    if (article?.category) {
+      revalidatePath(`/category/${article.category.toLowerCase()}`);
+    }
+
+    return NextResponse.json({ success: true, revalidated: true });
   } catch (err) {
     console.error('Delete exception:', err);
     return NextResponse.json({ error: 'Failed to delete article' }, { status: 500 });
@@ -44,6 +62,13 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
+    // First get the article slug for revalidation
+    const { data: article } = await supabaseAdmin
+      .from('articles')
+      .select('slug, category')
+      .eq('id', id)
+      .single();
+
     const { error } = await supabaseAdmin
       .from('articles')
       .update({ is_published: body.is_published })
@@ -53,7 +78,17 @@ export async function PATCH(
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true });
+    // Revalidate cached pages after status change
+    if (article?.slug) {
+      revalidatePath(`/article/${article.slug}`);
+    }
+    revalidatePath('/');
+    revalidatePath('/trending');
+    if (article?.category) {
+      revalidatePath(`/category/${article.category.toLowerCase()}`);
+    }
+
+    return NextResponse.json({ success: true, revalidated: true });
   } catch (err) {
     console.error('Update exception:', err);
     return NextResponse.json({ error: 'Failed to update article' }, { status: 500 });
