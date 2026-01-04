@@ -49,7 +49,7 @@ export default function AnalyticsPage() {
     // Fetch all stats in parallel
     const [articlesRes, subscribersRes, topRes, recentRes] = await Promise.all([
       supabase.from('articles').select('id, is_published, view_count'),
-      supabase.from('subscribers').select('id', { count: 'exact' }),
+      supabase.from('newsletter_subscribers').select('id', { count: 'exact' }),
       supabase
         .from('articles')
         .select('id, title, slug, view_count, category')

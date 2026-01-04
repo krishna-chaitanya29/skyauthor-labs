@@ -21,10 +21,9 @@ export async function POST(request: NextRequest) {
 
     // Insert subscriber
     const { error } = await supabase
-      .from('subscribers')
+      .from('newsletter_subscribers')
       .insert([{ 
         email: email.toLowerCase().trim(),
-        name: name?.trim() || null,
       }]);
 
     if (error) {

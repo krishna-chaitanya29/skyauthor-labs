@@ -6,7 +6,7 @@ export async function GET() {
   // Fetch latest 50 published articles
   const { data: articles } = await supabase
     .from('articles')
-    .select('slug, title, excerpt, created_at, category, author, cover_image')
+    .select('slug, title, excerpt, created_at, category, author_name, image_url')
     .eq('is_published', true)
     .order('created_at', { ascending: false })
     .limit(50);
@@ -19,8 +19,8 @@ export async function GET() {
       <description><![CDATA[${article.excerpt || ''}]]></description>
       <pubDate>${new Date(article.created_at).toUTCString()}</pubDate>
       <category>${article.category || 'General'}</category>
-      <author>${article.author || 'SkyAuthor Labs'}</author>
-      ${article.cover_image ? `<enclosure url="${article.cover_image}" type="image/jpeg" />` : ''}
+      <author>${article.author_name || 'SkyAuthor Labs'}</author>
+      ${article.image_url ? `<enclosure url="${article.image_url}" type="image/jpeg" />` : ''}
     </item>
   `).join('') || '';
 
