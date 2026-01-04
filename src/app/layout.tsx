@@ -75,6 +75,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        <link rel="alternate" type="application/rss+xml" title="SkyAuthor Labs RSS Feed" href="/feed.xml" />
         <GoogleAnalytics />
       </head>
       <body
