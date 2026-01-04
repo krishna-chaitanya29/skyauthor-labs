@@ -2,14 +2,14 @@
 
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import {
-  ArrowDown,
-  ArrowUp,
-  BarChart3,
-  Eye,
-  FileText,
-  Loader2,
-  TrendingUp,
-  Users
+    ArrowDown,
+    ArrowUp,
+    BarChart3,
+    Eye,
+    FileText,
+    Loader2,
+    TrendingUp,
+    Users
 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

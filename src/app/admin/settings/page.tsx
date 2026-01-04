@@ -2,16 +2,14 @@
 
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import {
-  Check,
-  Globe,
-  Key,
-  Loader2,
-  Mail,
-  Palette,
-  Save,
-  Settings,
-  Shield,
-  User
+    Check,
+    Globe,
+    Key,
+    Loader2,
+    Save,
+    Settings,
+    Shield,
+    User
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

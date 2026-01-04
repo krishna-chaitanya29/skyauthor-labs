@@ -3,14 +3,13 @@
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import { formatDate } from '@/lib/utils';
 import {
-  AlertCircle,
-  Edit,
-  Eye,
-  Loader2,
-  MoreVertical,
-  Plus,
-  Search,
-  Trash2
+    AlertCircle,
+    Edit,
+    Eye,
+    Loader2,
+    Plus,
+    Search,
+    Trash2
 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';

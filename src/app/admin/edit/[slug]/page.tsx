@@ -3,14 +3,14 @@
 import { createBrowserSupabaseClient } from '@/lib/supabase-browser';
 import { calculateReadingTime, extractExcerpt, generateSlug } from '@/lib/utils';
 import {
-  AlertCircle,
-  ArrowLeft,
-  CheckCircle,
-  Loader2,
-  Save,
-  Send,
-  Trash2,
-  X
+    AlertCircle,
+    ArrowLeft,
+    CheckCircle,
+    Loader2,
+    Save,
+    Send,
+    Trash2,
+    X
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
